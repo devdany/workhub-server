@@ -4,7 +4,7 @@ import { Field, ID, Int, ObjectType } from 'type-graphql'
 @Table({ freezeTableName: true, underscored: true, timestamps: false })
 @ObjectType()
 export default class User extends Model<User>{
-  @Field(() => ID)
+  @Field()
   @Column({
     autoIncrement: true,
     primaryKey: true
@@ -16,6 +16,17 @@ export default class User extends Model<User>{
     allowNull: false
   })
   email: string
+
+  @Column({
+    allowNull: false
+  })
+  password: string
+
+  @Field()
+  @Column({
+    allowNull: false
+  })
+  username: string
 
   @Field()
   @Column({

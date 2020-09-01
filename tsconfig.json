@@ -23,6 +23,9 @@
       ],
       "@service/*": [
         "src/sequelize/service/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
       ]
     },
   },
