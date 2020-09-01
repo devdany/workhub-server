@@ -10,5 +10,13 @@ export default {
         id: userId
       }
     })
+  },
+  createUser: (email: string, encryptedPassword: string, username: string) => {
+    return userRepository.create({
+      email: email,
+      password: encryptedPassword,
+      username: username,
+      createdAt: Date.now()
+    })
   }
 }
