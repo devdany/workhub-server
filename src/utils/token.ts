@@ -9,4 +9,8 @@ export const generateJwtToken = (id: number) => {
   })
 }
 
-export const confirmJwtToken = (token: string) => jwt.verify(token, JWT_SECRET_KEY)
+type DecodedJwt = {
+  id: number
+}
+
+export const confirmJwtToken = (token: string): DecodedJwt => <DecodedJwt>jwt.verify(token, JWT_SECRET_KEY)

@@ -12,3 +12,15 @@ export const encryptPassword = (password: string): Promise<string> => {
     })
   })
 }
+
+export const confirmPassword = (encoded: string, plain: string): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(plain, encoded, (err, res) => {
+      if (!err) {
+        resolve(res)
+      } else {
+        reject(err)
+      }
+    })
+  })
+}

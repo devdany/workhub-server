@@ -1,5 +1,6 @@
 # Config
 * config file 생성
+
 /src/config/secret.ts
 ```
 export const JWT_SECRET_KEY = key
