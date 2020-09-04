@@ -33,4 +33,10 @@ export default class User extends Model<User>{
     allowNull: false
   })
   createdAt: string
+
+  @Field()
+  @Column({
+    allowNull: false
+  })
+  lastLogin: string
 }
