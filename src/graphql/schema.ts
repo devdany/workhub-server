@@ -4,7 +4,7 @@ import { validate } from 'graphql'
 
 export const getSchema = async () => {
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver,],
     validate: false,
   })
   return schema
