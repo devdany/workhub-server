@@ -28,6 +28,14 @@ export default class User extends Model<User>{
   })
   username: string
 
+  @Field({
+    nullable: true
+  })
+  @Column({
+    allowNull: true
+  })
+  profileImg: string
+
   @Field()
   @Column({
     allowNull: false
@@ -39,4 +47,10 @@ export default class User extends Model<User>{
     allowNull: false
   })
   lastLogin: string
+
+  @Field()
+  @Column({
+    allowNull: false
+  })
+  isInitalize: boolean
 }

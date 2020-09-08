@@ -18,7 +18,8 @@ export default {
       password: encryptedPassword,
       username: username,
       createdAt: today,
-      lastLogin: today
+      lastLogin: today,
+      isInitalize: false,
     })
   },
   findByEmail: (email: string) => {
