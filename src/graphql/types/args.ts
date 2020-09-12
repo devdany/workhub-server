@@ -25,3 +25,21 @@ export class SignInArgs {
   @Field()
   password: string
 }
+
+@ArgsType()
+export class EditProfileArgs {
+  @Field()
+  userId: number
+
+  @Field({ nullable: true })
+  profileImg?: string
+
+  @Field({ nullable: true })
+  lastName?: string
+
+  @Field({ nullable: true })
+  firstName?: string
+
+  @Field({ nullable: true })
+  headLine?: string
+}

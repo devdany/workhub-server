@@ -3,7 +3,7 @@ import { encryptPassword, confirmPassword } from '@utils/encrypt'
 import { generateJwtToken, confirmJwtToken } from '@utils/token'
 import userService, { EditedProfile } from '@service/userService'
 import User from '@models/User'
-import { UserArgs, SignUpArgs, SignInArgs } from '@src/graphql/types/args'
+import { UserArgs, SignUpArgs, SignInArgs, EditProfileArgs } from '@src/graphql/types/args'
 import { LoginUser } from '@src/graphql/types/res'
 import { uploadProfileImage } from '@utils/s3Service'
 @Resolver()
@@ -75,14 +75,9 @@ export default class UserResolver {
   }
 
   @Mutation(() => User)
-  async editProfile(
-    @Arg('userId') userId: number,
-    @Arg('profileImg',{ nullable: true }) profileImg?: string,
-    @Arg('lastName', { nullable: true }) lastName?: string,
-    @Arg('firstName', { nullable: true }) firstName?: string,
-    @Arg('headLine', { nullable: true }) headLine?: string,
-  ): Promise<User> {
+  async editProfile(@Args() args: EditProfileArgs): Promise<User> {
     // Sage profile image to s3
+    const { userId, profileImg, lastName, firstName, headLine } = args
     let profileUrl: string | null = null
     if (profileImg && !profileImg.startsWith('https://')) {
       profileUrl = await uploadProfileImage(profileImg, 'profileImg_' + userId)
