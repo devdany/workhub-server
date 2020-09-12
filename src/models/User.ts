@@ -36,11 +36,43 @@ export default class User extends Model<User>{
   })
   profileImg: string
 
+  @Field({
+    nullable: true
+  })
+  @Column({
+    allowNull: true
+  })
+  lastName: string
+
+  @Field({
+    nullable: true
+  })
+  @Column({
+    allowNull: true
+  })
+  firstName: string
+
+  @Field({
+    nullable: true
+  })
+  @Column({
+    allowNull: true
+  })
+  headLine: string
+
   @Field()
   @Column({
     allowNull: false
   })
   createdAt: string
+
+  @Field({
+    nullable: true
+  })
+  @Column({
+    allowNull: true
+  })
+  updatedAt: string
 
   @Field()
   @Column({

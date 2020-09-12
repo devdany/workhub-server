@@ -3,6 +3,13 @@ import sequelize from '@src/sequelize'
 
 const userRepository = sequelize.getRepository(User)
 
+export type EditedProfile = {
+  firstName?: string
+  lastName?: string
+  headLine?: string
+  profileImg?: string
+}
+
 export default {
   findUser: (userId: number) => {
     return userRepository.findOne({
@@ -53,6 +60,16 @@ export default {
   updateLastLogin: (userId: number) => {
     return userRepository.update({
       lastLogin: Date.now()
+    }, {
+      where: {
+        id: userId
+      }
+    })
+  },
+  editProfile: (userId: number, editedProfile: EditedProfile) => {
+    return userRepository.update({
+      ...editedProfile,
+      isInitalize: true,
     }, {
       where: {
         id: userId

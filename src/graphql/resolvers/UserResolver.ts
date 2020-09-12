@@ -1,11 +1,11 @@
 import { Query, Mutation, Resolver, Args, Arg} from 'type-graphql'
 import { encryptPassword, confirmPassword } from '@utils/encrypt'
 import { generateJwtToken, confirmJwtToken } from '@utils/token'
-import userService from '@service/userService'
+import userService, { EditedProfile } from '@service/userService'
 import User from '@models/User'
 import { UserArgs, SignUpArgs, SignInArgs } from '@src/graphql/types/args'
 import { LoginUser } from '@src/graphql/types/res'
-
+import { uploadProfileImage } from '@utils/s3Service'
 @Resolver()
 export default class UserResolver {
   @Query(() => User)
@@ -72,5 +72,35 @@ export default class UserResolver {
       user: user,
       token: token
     }
+  }
+
+  @Mutation(() => User)
+  async editProfile(
+    @Arg('userId') userId: number,
+    @Arg('profileImg',{ nullable: true }) profileImg?: string,
+    @Arg('lastName', { nullable: true }) lastName?: string,
+    @Arg('firstName', { nullable: true }) firstName?: string,
+    @Arg('headLine', { nullable: true }) headLine?: string,
+  ): Promise<User> {
+    // Sage profile image to s3
+    let profileUrl: string | null = null
+    if (profileImg && !profileImg.startsWith('https://')) {
+      profileUrl = await uploadProfileImage(profileImg, 'profileImg_' + userId)
+    }
+
+    const updatedProfile: EditedProfile = {
+      lastName,
+      firstName,
+      headLine,
+    }
+
+    if (profileUrl) {
+      updatedProfile.profileImg = profileUrl
+    }
+    await userService.editProfile(userId, updatedProfile)
+    
+    const updatedUser = await userService.findUser(userId)
+
+    return updatedUser
   }
 }
