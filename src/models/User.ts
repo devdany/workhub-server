@@ -85,4 +85,10 @@ export default class User extends Model<User>{
     allowNull: false
   })
   isInitalize: boolean
+
+  @Field()
+  @Column({
+    allowNull: false
+  })
+  isCertificated: boolean
 }

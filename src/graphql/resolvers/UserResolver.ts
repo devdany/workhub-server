@@ -6,6 +6,7 @@ import User from '@models/User'
 import { UserArgs, SignUpArgs, SignInArgs, EditProfileArgs } from '@src/graphql/types/args'
 import { LoginUser } from '@src/graphql/types/res'
 import { uploadProfileImage } from '@utils/s3Service'
+import { emailSender } from '@utils/emailUtils'
 @Resolver()
 export default class UserResolver {
   @Query(() => User)
@@ -71,6 +72,17 @@ export default class UserResolver {
     return {
       user: user,
       token: token
+    }
+  }
+
+  @Mutation(() => Boolean)
+  async sendCertificationMail(@Arg('email') email: string): Promise<boolean> {
+    try {
+      const info = await emailSender(email)
+      console.log(info)
+      return true
+    } catch (err) {
+      throw new Error('Send email fail')
     }
   }
 

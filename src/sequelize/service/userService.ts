@@ -27,6 +27,7 @@ export default {
       createdAt: today,
       lastLogin: today,
       isInitalize: false,
+      isCertificated: false,
     })
   },
   findByEmail: (email: string) => {
