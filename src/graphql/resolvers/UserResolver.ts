@@ -5,8 +5,11 @@ import userService, { EditedProfile } from '@service/userService'
 import User from '@models/User'
 import { UserArgs, SignUpArgs, SignInArgs, EditProfileArgs } from '@src/graphql/types/args'
 import { LoginUser } from '@src/graphql/types/res'
-import { uploadProfileImage } from '@utils/s3Service'
-import { emailSender } from '@utils/emailUtils'
+import { uploadProfileImage } from '@aws/s3'
+import emailCertificationService from '@redis/service/emailCertificationService'
+import { certificatiomEmailSender } from '@utils/emailUtils'
+import { generateRandomString } from '@utils/stringUtils'
+
 @Resolver()
 export default class UserResolver {
   @Query(() => User)
@@ -78,21 +81,39 @@ export default class UserResolver {
   @Mutation(() => Boolean)
   async sendCertificationMail(@Arg('email') email: string): Promise<boolean> {
     try {
-      const info = await emailSender(email)
-      console.log(info)
+      const code = generateRandomString(7)
+      await emailCertificationService.setCertificationCode(email, code)
+      await certificatiomEmailSender(email, code)
       return true
     } catch (err) {
+      console.log(err)
       throw new Error('Send email fail')
+    }
+  }
+
+  @Mutation(() => Boolean)
+  async confirmCertificationCode(@Arg('email') email: string, @Arg('code') code: string, @Arg('token') token: string): Promise<boolean> {
+    try {
+      const result = await emailCertificationService.confirmCertificationCode(email, code)
+      if (result) {
+        const { id } = confirmJwtToken(token)
+        await userService.editProfile(id, { isCertificated: true })
+        await emailCertificationService.deleteCertificationCode(email)
+      }
+      return result
+    } catch (err) {
+      throw new Error('Certificate fail')
     }
   }
 
   @Mutation(() => User)
   async editProfile(@Args() args: EditProfileArgs): Promise<User> {
     // Sage profile image to s3
-    const { userId, profileImg, lastName, firstName, headLine } = args
+    const { token, profileImg, lastName, firstName, headLine } = args
+    const { id } = confirmJwtToken(token)
     let profileUrl: string | null = null
     if (profileImg && !profileImg.startsWith('https://')) {
-      profileUrl = await uploadProfileImage(profileImg, 'profileImg_' + userId)
+      profileUrl = await uploadProfileImage(profileImg, 'profileImg_' + id)
     }
 
     const updatedProfile: EditedProfile = {
@@ -104,9 +125,9 @@ export default class UserResolver {
     if (profileUrl) {
       updatedProfile.profileImg = profileUrl
     }
-    await userService.editProfile(userId, updatedProfile)
+    await userService.editProfile(id, updatedProfile)
     
-    const updatedUser = await userService.findUser(userId)
+    const updatedUser = await userService.findUser(id)
 
     return updatedUser
   }

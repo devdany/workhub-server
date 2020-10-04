@@ -1,5 +1,8 @@
-import { Column, Model, Table } from 'sequelize-typescript'
-import { Field, ID, Int, ObjectType } from 'type-graphql'
+import { BelongsToMany, Column, Model, Table } from 'sequelize-typescript'
+import { Field, ObjectType } from 'type-graphql'
+
+import Project from './Project'
+import ProjectMember from './ProjectMember'
 
 @Table({ freezeTableName: true, underscored: true, timestamps: false })
 @ObjectType()
@@ -85,6 +88,10 @@ export default class User extends Model<User>{
     allowNull: false
   })
   isInitalize: boolean
+
+  @Field(() => [Project], { nullable: true })
+  @BelongsToMany(() => Project, () => ProjectMember)
+  projects: Project[]
 
   @Field()
   @Column({

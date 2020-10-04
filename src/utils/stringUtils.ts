@@ -1,3 +1,5 @@
+import randomstring from 'randomstring'
+
 type ImageInfo = {
   buffer: Buffer
   type: string
@@ -10,4 +12,8 @@ export const getImageFromBlob = (blob: string): ImageInfo => {
     buffer: imageBuffer,
     type: type,
   }
+}
+
+export const generateRandomString = (length: number): string => {
+  return randomstring.generate(length)
 }

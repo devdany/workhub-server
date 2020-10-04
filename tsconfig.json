@@ -15,6 +15,9 @@
       "@src/*": [
         "src/*"
       ],
+      "@aws/*": [
+        "src/aws/*"
+      ],
       "@models/*": [
         "src/models/*"
       ],
@@ -26,6 +29,9 @@
       ],
       "@utils/*": [
         "src/utils/*"
+      ],
+      "@redis/*": [
+        "src/redis/*"
       ]
     },
   },

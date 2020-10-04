@@ -29,7 +29,7 @@ export class SignInArgs {
 @ArgsType()
 export class EditProfileArgs {
   @Field()
-  userId: number
+  token: string
 
   @Field({ nullable: true })
   profileImg?: string

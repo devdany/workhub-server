@@ -18,7 +18,7 @@ export const emailGenerator = () => {
 
 }
 
-export const emailSender = (email: string) => {
+export const certificatiomEmailSender = (email: string, code: string) => {
   return new Promise((resolve, reject) => {
     const mailOption = {
       from : 'support@workhub.com',
@@ -26,6 +26,7 @@ export const emailSender = (email: string) => {
       subject : '[Workhub] Certificate email',
       html : `
         <h1>hello</h1>
+        <p>certification code : ${code}<p>
       `
     }
 

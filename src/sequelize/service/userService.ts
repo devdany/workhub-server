@@ -8,6 +8,7 @@ export type EditedProfile = {
   lastName?: string
   headLine?: string
   profileImg?: string
+  isCertificated?: boolean
 }
 
 export default {

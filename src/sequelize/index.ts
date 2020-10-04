@@ -1,4 +1,12 @@
+import Comment from '@models/Comment'
+import CommentLike from '@models/CommentLike'
+import Feed from '@models/Feed'
+import FeedContent from '@models/FeedContent'
+import FeedLike from '@models/FeedLike'
 import { Op } from 'sequelize'
+import Project from '@models/Project'
+import ProjectContent from '@models/ProjectContent'
+import ProjectMember from '@models/ProjectMember'
 import { Sequelize } from 'sequelize-typescript'
 import User from '@models/User'
 import storageConfig from '@src/config/storage'
@@ -12,7 +20,7 @@ export default new Sequelize({
   username: dbConnectConfig.username,
   password: dbConnectConfig.password,
   database: dbConnectConfig.schema,
-  models: [User],
+  models: [User, Comment, CommentLike, Feed, FeedContent, FeedLike, Project, ProjectContent, ProjectMember],
   operatorsAliases: {
     $and: Op.and,
     $or: Op.or,
